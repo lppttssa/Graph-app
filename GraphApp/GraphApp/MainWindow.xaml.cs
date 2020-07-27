@@ -47,6 +47,11 @@ namespace GraphApp
             DrawGraph();        
         }
 
+        private void btnShowStat_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         public void ReadTxtFile(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -124,6 +129,12 @@ namespace GraphApp
         }
 
         public SeriesCollection SeriesCollection { get; set; }
+
+        private void CartesianChart_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         public string[] Labels { get; set; }
         public Func<double, string> YFormatter { get; set; }
     }
