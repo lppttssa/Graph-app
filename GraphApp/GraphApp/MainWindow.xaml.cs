@@ -16,6 +16,7 @@ using Microsoft.Win32;
 using System.IO;
 using LiveCharts;
 using LiveCharts.Wpf;
+using LiveCharts.Helpers;
 
 namespace GraphApp
 {
@@ -26,7 +27,10 @@ namespace GraphApp
     {
 		List<double> xList = new List<double>();
 		List<double> yList = new List<double>();
-		public MainWindow()
+        string[] xArrayString = new string[0];
+        string[] yArrayString = new string[0];
+
+        public MainWindow()
         {
             InitializeComponent();
         }
@@ -41,8 +45,8 @@ namespace GraphApp
 				string file = File.ReadAllText(openFileDialog.FileName);
 
 				string[] lines = file.Split('\n');
-				string[] xArrayString = lines[0].Split(' ');
-				string[] yArrayString = lines[1].Split(' ');
+				xArrayString = lines[0].Split(' ');
+				yArrayString = lines[1].Split(' ');
 
 				for (int i = 0; i < xArrayString.Length; i++)
                 {
@@ -58,10 +62,10 @@ namespace GraphApp
             {
                 new LineSeries
                 {
-                    Title = "Series 1",
-                    Values = new ChartValues<double> { 4, 6, 5, 2 ,4 }
-                },
-                new LineSeries
+                    Title = "Данные",
+                    Values = yList.AsChartValues()
+                }
+                /*new LineSeries
                 {
                     Title = "Series 2",
                     Values = new ChartValues<double> { 6, 7, 3, 4 ,6 },
@@ -73,14 +77,14 @@ namespace GraphApp
                     Values = new ChartValues<double> { 4,2,7,2,7 },
                     PointGeometry = DefaultGeometries.Square,
                     PointGeometrySize = 15
-                }
+                }*/
             };
 
-            Labels = new[] { "Jan", "Feb", "Mar", "Apr", "May" };
+            Labels = xArrayString;
             YFormatter = value => value.ToString("C");
 
             //modifying the series collection will animate and update the chart
-            SeriesCollection.Add(new LineSeries
+            /*SeriesCollection.Add(new LineSeries
             {
                 Title = "Series 4",
                 Values = new ChartValues<double> { 5, 3, 2, 4 },
@@ -88,10 +92,10 @@ namespace GraphApp
                 PointGeometry = Geometry.Parse("m 25 70.36218 20 -28 -20 22 -8 -6 z"),
                 PointGeometrySize = 50,
                 PointForeground = Brushes.Gray
-            });
+            });*/
 
             //modifying any series values will also animate and update the chart
-            SeriesCollection[3].Values.Add(5d);
+            //SeriesCollection[3].Values.Add(5d);
 
             DataContext = this;
 
