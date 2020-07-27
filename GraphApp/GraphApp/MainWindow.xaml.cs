@@ -22,6 +22,8 @@ namespace GraphApp
     /// </summary>
     public partial class MainWindow : Window
     {
+		List<double> xList = new List<double>();
+		List<double> yList = new List<double>();
 		public MainWindow()
         {
             InitializeComponent();
@@ -34,6 +36,15 @@ namespace GraphApp
 			{
 				string file = File.ReadAllText(openFileDialog.FileName);
 
+				string[] lines = file.Split('\n');
+				string[] xArrayString = lines[0].Split(' ');
+				string[] yArrayString = lines[1].Split(' ');
+
+				for (int i = 0; i < xArrayString.Length; i++)
+                {
+					xList.Add(Double.Parse(xArrayString[i]));
+					yList.Add(Double.Parse(yArrayString[i]));
+				}
 			}
 
 		}
