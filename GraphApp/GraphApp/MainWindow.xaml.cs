@@ -29,6 +29,8 @@ namespace GraphApp
 		List<double> yList = new List<double>();
         string[] xArrayString = new string[0];
         string[] yArrayString = new string[0];
+        string xName, yName;
+        double a, b;
 
         public MainWindow()
         {
@@ -39,67 +41,88 @@ namespace GraphApp
 		{
 
             //чтение из файла
-			OpenFileDialog openFileDialog = new OpenFileDialog();
-			if (openFileDialog.ShowDialog() == true)
-			{
-				string file = File.ReadAllText(openFileDialog.FileName);
+            ReadTxtFile(sender, e);
 
-				string[] lines = file.Split('\n');
-				xArrayString = lines[0].Split(' ');
-				yArrayString = lines[1].Split(' ');
+            //отрисовка графика 
+            DrawGraph();        
+        }
 
-				for (int i = 0; i < xArrayString.Length; i++)
+        public void ReadTxtFile(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string file = File.ReadAllText(openFileDialog.FileName);
+
+                string[] lines = file.Split('\n');
+                xArrayString = lines[2].Split(' ');
+                yArrayString = lines[3].Split(' ');
+                xName = lines[0];
+                yName = lines[1];
+
+
+                for (int i = 0; i < xArrayString.Length; i++)
                 {
-					xList.Add(Double.Parse(xArrayString[i]));
-					yList.Add(Double.Parse(yArrayString[i]));
-				}
-			}
+                    xList.Add(Double.Parse(xArrayString[i]));
+                    yList.Add(Double.Parse(yArrayString[i]));
+                }
+            }
+        }
 
-
-            //отрисовка графика
-
+        public void DrawGraph()
+        {
             SeriesCollection = new SeriesCollection
             {
                 new LineSeries
                 {
-                    Title = "Данные",
+                    Title = xName,
                     Values = yList.AsChartValues()
                 }
-                /*new LineSeries
-                {
-                    Title = "Series 2",
-                    Values = new ChartValues<double> { 6, 7, 3, 4 ,6 },
-                    PointGeometry = null
-                },
-                new LineSeries
-                {
-                    Title = "Series 3",
-                    Values = new ChartValues<double> { 4,2,7,2,7 },
-                    PointGeometry = DefaultGeometries.Square,
-                    PointGeometrySize = 15
-                }*/
             };
 
             Labels = xArrayString;
             YFormatter = value => value.ToString("C");
 
-            //modifying the series collection will animate and update the chart
-            /*SeriesCollection.Add(new LineSeries
-            {
-                Title = "Series 4",
-                Values = new ChartValues<double> { 5, 3, 2, 4 },
-                LineSmoothness = 0, //0: straight lines, 1: really smooth lines
-                PointGeometry = Geometry.Parse("m 25 70.36218 20 -28 -20 22 -8 -6 z"),
-                PointGeometrySize = 50,
-                PointForeground = Brushes.Gray
-            });*/
 
-            //modifying any series values will also animate and update the chart
-            //SeriesCollection[3].Values.Add(5d);
+            FindLinTrendLine();
+            List<double> yListForTrend = new List<double>();
+            for (int i = 0; i < yList.Count; i++)
+            {
+                yListForTrend.Add(xList[i] * a + b);
+            }
+
+            SeriesCollection.Add(new LineSeries
+            {
+                Title = "Линия Тренда",
+                Values = yListForTrend.AsChartValues()
+            });
 
             DataContext = this;
-
         }
+
+        public void FindLinTrendLine()
+        {
+            double SumX = 0, SumXSqr = 0, SumXY = 0, SumY = 0;
+
+            for (int i = 0; i < xList.Count; i++)
+            {
+                SumX += xList[i];
+                SumXSqr += xList[i] * xList[i];
+                SumXY += xList[i] * yList[i];
+                SumY += yList[i];
+            }
+
+            double det = SumXSqr * xList.Count - SumX * SumX;
+            if (det != 0)
+            {
+                double detA = SumXY * xList.Count - SumY * SumX;
+                a = detA / det;
+
+                double detB = SumXSqr * SumY - SumX * SumXY;
+                b = detB / det;
+            }
+        }
+
         public SeriesCollection SeriesCollection { get; set; }
         public string[] Labels { get; set; }
         public Func<double, string> YFormatter { get; set; }
