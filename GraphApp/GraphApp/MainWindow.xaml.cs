@@ -31,6 +31,7 @@ namespace GraphApp
         string[] yArrayString = new string[0];
         string xName, yName;
         double a, b;
+        bool IsDraw;
 
 
 
@@ -45,10 +46,14 @@ namespace GraphApp
             //чтение из файла
             ReadTxtFile(sender, e);
 
+            FindLinTrendLine();
+
             //отрисовка графика 
             DrawGraph();
 
             ShowStatistics();
+
+            TextBoxForPrediction.IsEnabled = true;
         }
 
 
@@ -76,31 +81,41 @@ namespace GraphApp
 
         public void DrawGraph()
         {
-            SeriesCollection = new SeriesCollection
+            if (IsDraw)
             {
-                new LineSeries
+                SeriesCollection.RemoveAt(0);
+                SeriesCollection.RemoveAt(0);
+                SeriesCollection.Add(new LineSeries
                 {
                     Values = yList.AsChartValues()
-                }
-            };
+                });
+            }
+            else {
+                SeriesCollection = new SeriesCollection
+                {
+                    new LineSeries
+                    {
+                        Values = yList.AsChartValues()
+                    }
+                };
+            }         
 
             Labels = xArrayString;
 
-
-
-            FindLinTrendLine();
             List<double> yListForTrend = new List<double>();
-            for (int i = 0; i < yList.Count; i++)
+            for (int i = 0; i < xList.Count; i++)
             {
                 yListForTrend.Add(xList[i] * a + b);
             }
 
-            SeriesCollection.Add(new LineSeries
+            this.SeriesCollection.Add(new LineSeries
             {
                 Values = yListForTrend.AsChartValues()
             });
 
+            IsDraw = true;
             DataContext = this;
+
         }
 
         public void FindLinTrendLine()
@@ -142,49 +157,43 @@ namespace GraphApp
             }
             avg /= yList.Count;
 
-            /*TextBlock textStat = new TextBlock();
-            textStat.Text = "Statistics";
-            textStat.FontSize = 22;
-            textStat.FontFamily = new FontFamily("Arial");
-            textStat.TextAlignment = TextAlignment.Center;
-            textStat.Width = StatisticListBox.Width - 20;
-            textStat.Text = "Statistics";
-            StatisticListBox.Items.Add(textStat);*/
-
-            /*TextBlock text = new TextBlock();
-            text.Text = "Average value:" + "\n" + avg.ToString();
-            text.FontSize = 18;
-            text.FontFamily = new FontFamily("Arial");
-            text.TextAlignment = TextAlignment.Center;
-            text.Width = StatisticListBox.Width - 20;*/
             TextBlockForAvg.Text = "Average value:" + "\n" + avg.ToString();
-            //StatisticListBox.Items.Add(text);
-
-            /*TextBlock text1 = new TextBlock();
-            text1.FontSize = 18;
-            text1.FontFamily = new FontFamily("Arial");
-            text1.TextAlignment = TextAlignment.Center;
-            text1.Text = "Max element:" + "\n" + max.ToString();
-            text1.Width = StatisticListBox.Width - 20;
-            StatisticListBox.Items.Add(text1);*/
+            
             TextBlockForMax.Text = "Max element:" + "\n" + max.ToString();
 
-            /*TextBlock text2 = new TextBlock();
-            text2.FontSize = 18;
-            text2.FontFamily = new FontFamily("Arial");
-            text2.TextAlignment = TextAlignment.Center;
-            text2.Text = "Min element:" + "\n" + min.ToString();
-            text2.Width = StatisticListBox.Width - 20;
-            StatisticListBox.Items.Add(text2);*/
             TextBlockForMin.Text = "Min element:" + "\n" + min.ToString();
 
         }
+
+     
 
         public SeriesCollection SeriesCollection { get; set; }
 
         private void CartesianChart_Loaded(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void TextBoxForPrediction_KeyDown(object sender, KeyEventArgs e)
+        {
+            int predNum;
+            if (e.Key == Key.Enter)
+            {
+                predNum = Convert.ToInt32(TextBoxForPrediction.Text);
+                string[] memArray = new string[xArrayString.Length + predNum];
+                double dif = xList[1] - xList[0];
+                for (int i = 0; i < xArrayString.Length; i++)
+                {
+                    memArray[i] = xArrayString[i];
+                }
+                for (int i = 1; i <= predNum; i++)
+                {
+                    xList.Add(xList[xList.Count - 1] + dif);
+                    memArray[xList.Count - 1] = xList[xList.Count - 1].ToString();
+                }
+                xArrayString = memArray;
+                DrawGraph();
+            }
         }
 
         public string[] Labels { get; set; }
