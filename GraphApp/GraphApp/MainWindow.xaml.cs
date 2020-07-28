@@ -179,20 +179,27 @@ namespace GraphApp
             int predNum;
             if (e.Key == Key.Enter)
             {
-                predNum = Convert.ToInt32(TextBoxForPrediction.Text);
-                string[] memArray = new string[xArrayString.Length + predNum];
-                double dif = xList[1] - xList[0];
-                for (int i = 0; i < xArrayString.Length; i++)
+                try
                 {
-                    memArray[i] = xArrayString[i];
+                    predNum = Convert.ToInt32(TextBoxForPrediction.Text);
+                    string[] memArray = new string[xArrayString.Length + predNum];
+                    double dif = xList[1] - xList[0];
+                    for (int i = 0; i < xArrayString.Length; i++)
+                    {
+                        memArray[i] = xArrayString[i];
+                    }
+                    for (int i = 1; i <= predNum; i++)
+                    {
+                        xList.Add(xList[xList.Count - 1] + dif);
+                        memArray[xList.Count - 1] = xList[xList.Count - 1].ToString();
+                    }
+                    xArrayString = memArray;
+                    DrawGraph();
                 }
-                for (int i = 1; i <= predNum; i++)
+                catch
                 {
-                    xList.Add(xList[xList.Count - 1] + dif);
-                    memArray[xList.Count - 1] = xList[xList.Count - 1].ToString();
+
                 }
-                xArrayString = memArray;
-                DrawGraph();
             }
         }
 

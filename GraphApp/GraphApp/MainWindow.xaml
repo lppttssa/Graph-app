@@ -7,15 +7,12 @@
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         Title="OpenFileDialogSample" Height="893.985" Width="1241.353">
     <Grid Background="#e2c9c3">
-        <DockPanel Height="30" VerticalAlignment="Top" Background="#bbcacc">
-            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Width="1230" Height="30" FontFamily="Arial" 
-                        FontSize="19" Foreground="#7e3d4a" BorderBrush="AliceBlue" Name="btnOpenFile"
-                        Click="btnOpenFile_Click" Background="#bbcacc">
-                Open file
-            </Button>
-
-        </DockPanel>
-        <lvc:CartesianChart Name="chart" Series="{Binding SeriesCollection}" LegendLocation="None"  Margin="21,42,225,25" Loaded="CartesianChart_Loaded" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="230" />
+        </Grid.ColumnDefinitions>
+        
+        <lvc:CartesianChart Grid.Column="0" Name="chart" Series="{Binding SeriesCollection}" LegendLocation="None" Loaded="CartesianChart_Loaded" >
             <lvc:CartesianChart.AxisY>
                 <lvc:Axis Title="Sales" LabelFormatter="{Binding YFormatter}"></lvc:Axis>
             </lvc:CartesianChart.AxisY>
@@ -23,14 +20,27 @@
                 <lvc:Axis Title="Month" Labels="{Binding Labels}"></lvc:Axis>
             </lvc:CartesianChart.AxisX>
         </lvc:CartesianChart>
-        <ListBox Width="200" HorizontalAlignment="Right" Margin="0,46,10,597"  Background="#e2c9c3" BorderBrush="AliceBlue" Name="StatisticListBox">
-            <TextBlock Width="186" Height="38" Name="TextBlockStatistics" FontFamily="Arial" FontSize="25" TextAlignment="Center">Statistics</TextBlock>
-            <TextBlock Width="186" Height="53" Name="TextBlockForAvg" FontFamily="Arial" FontSize="20" TextAlignment="Center"></TextBlock>
-            <TextBlock Width="186" Height="51" Name="TextBlockForMax" FontFamily="Arial" FontSize="20" TextAlignment="Center"></TextBlock>
-            <TextBlock Width="186" Height="50" x:Name="TextBlockForMin" FontFamily="Arial" FontSize="20" TextAlignment="Center"/>
-        </ListBox>
-        <TextBox Margin="1023,288,10,505" Background="#e2c9c3" BorderBrush="AliceBlue" FontSize="20" FontFamily="Arial" IsEnabled="False" Name="TextBoxForPrediction"
-                 KeyDown="TextBoxForPrediction_KeyDown"/>
+        <StackPanel Grid.Column="1">
+            <DockPanel Background="#bbcacc" Height="30" VerticalAlignment="Top">
+                <Button HorizontalAlignment="Center" FontFamily="Arial" 
+                        FontSize="19"  Foreground="#7e3d4a" BorderBrush="AliceBlue" Name="btnOpenFile"
+                        Click="btnOpenFile_Click" Background="#bbcacc">
+                    Open file
+                </Button>
+            </DockPanel>
+            <ListBox Height="320"  Background="#e2c9c3" BorderBrush="AliceBlue" Name="StatisticListBox" VerticalAlignment="Top">
+                <TextBlock Height="38" Name="TextBlockStatistics" FontFamily="Arial" FontSize="25" TextAlignment="Center" Width="216">Statistics</TextBlock>
+                <TextBlock Height="53" Name="TextBlockForAvg" FontFamily="Arial" FontSize="20" TextAlignment="Center" Width="216"></TextBlock>
+                <TextBlock Height="51" Name="TextBlockForMax" FontFamily="Arial" FontSize="20" TextAlignment="Center" Width="216"></TextBlock>
+                <TextBlock Height="50" x:Name="TextBlockForMin" FontFamily="Arial" FontSize="20" TextAlignment="Center" Width="216"/>
+                <TextBlock Height="38" Name="TextBlockPrediction" FontFamily="Arial" FontSize="25" TextAlignment="Center" Width="216">Prediction</TextBlock>
+                <TextBox Height="50" Background="#e2c9c3" BorderBrush="AliceBlue" FontSize="20" 
+                     FontFamily="Arial" IsEnabled="False" Name="TextBoxForPrediction" VerticalAlignment="Bottom"
+                     KeyDown="TextBoxForPrediction_KeyDown" Width="216"/>
+            </ListBox>
+        </StackPanel>
+       
+       
     </Grid>
 </Window>
     
