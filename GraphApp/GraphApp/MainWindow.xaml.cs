@@ -42,6 +42,11 @@ namespace GraphApp
 
 		private void btnOpenFile_Click(object sender, RoutedEventArgs e)
 		{
+            xList.Clear();
+            yList.Clear();
+            xArrayString = new string[0];
+            yArrayString = new string[0];
+            TextBoxForPrediction.Clear();
 
             //чтение из файла
             ReadTxtFile(sender, e);
@@ -194,6 +199,7 @@ namespace GraphApp
                         memArray[xList.Count - 1] = xList[xList.Count - 1].ToString();
                     }
                     xArrayString = memArray;
+                    TextBoxForPrediction.Clear();
                     DrawGraph();
                 }
                 catch
