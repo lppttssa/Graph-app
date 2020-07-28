@@ -7,13 +7,13 @@
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         Title="OpenFileDialogSample" Height="300" Width="1241.353">
     <Grid Background="#e2c9c3">
-        <DockPanel Margin="10">
+        <DockPanel Height="30" VerticalAlignment="Top" Background="#bbcacc">
             <Button HorizontalAlignment="Left" VerticalAlignment="Top" Width="409" Height="30" FontFamily="Arial" 
                         FontSize="19" Foreground="#7e3d4a" BorderBrush="AliceBlue" Name="btnOpenFile"
                         Click="btnOpenFile_Click" Background="#bbcacc">
                     Open file
                 </Button>
-                <Button HorizontalAlignment="Right" VerticalAlignment="Top" Width="400" Height="30" FontFamily="Arial" 
+            <Button HorizontalAlignment="Right" VerticalAlignment="Top" Width="400" Height="30" FontFamily="Arial" 
                     FontSize="19" Foreground="#7e3d4a" BorderBrush="AliceBlue" Name="btnShowStat"
                         Click="btnShowStat_Click" Background="#bbcacc">Show statistics</Button>
 
