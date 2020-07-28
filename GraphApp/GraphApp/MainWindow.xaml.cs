@@ -75,12 +75,23 @@ namespace GraphApp
                 xName = lines[0];
                 yName = lines[1];
 
-
-                for (int i = 0; i < xArrayString.Length; i++)
+                try
                 {
-                    xList.Add(Double.Parse(xArrayString[i]));
-                    yList.Add(Double.Parse(yArrayString[i]));
+                    for (int i = 0; i < xArrayString.Length; i++)
+                    {
+                        xList.Add(Double.Parse(xArrayString[i]));
+                        yList.Add(Double.Parse(yArrayString[i]));
+                    }
                 }
+                catch
+                {
+                    for (int i = 0; i < xArrayString.Length; i++)
+                    {
+                        xList.Add(i + 1);
+                        yList.Add(Double.Parse(yArrayString[i]));
+                    }
+                }
+
             }
         }
 
