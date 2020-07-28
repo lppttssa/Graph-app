@@ -67,13 +67,23 @@ namespace GraphApp
             OpenFileDialog openFileDialog = new OpenFileDialog();
             if (openFileDialog.ShowDialog() == true)
             {
+
                 string file = File.ReadAllText(openFileDialog.FileName);
 
-                string[] lines = file.Split('\n');
-                xArrayString = lines[2].Split(' ');
-                yArrayString = lines[3].Split(' ');
-                xName = lines[0];
-                yName = lines[1];
+                if (openFileDialog.FileName[openFileDialog.FileName.Length - 1] == 't')
+                {
+                    string[] lines = file.Split('\n');
+                    xArrayString = lines[0].Split(' ');
+                    yArrayString = lines[1].Split(' ');
+                    xName = xArrayString[0];
+                    yName = yArrayString[0];
+                    xArrayString = xArrayString.Skip(1).ToArray();
+                    yArrayString = yArrayString.Skip(1).ToArray();
+                }
+                else if (openFileDialog.FileName[openFileDialog.FileName.Length - 1] == 'v')
+                {
+
+                }
 
                 try
                 {
@@ -91,6 +101,7 @@ namespace GraphApp
                         yList.Add(Double.Parse(yArrayString[i]));
                     }
                 }
+                
 
             }
         }
@@ -114,7 +125,11 @@ namespace GraphApp
                         Values = yList.AsChartValues()
                     }
                 };
-            }         
+            }
+
+            AxisX.Title = xName;
+            AxisY.Title = yName;
+            
 
             Labels = xArrayString;
 
@@ -159,25 +174,32 @@ namespace GraphApp
 
         public void ShowStatistics()
         {
-            double avg = 0, max, min;
-            max = yList[0];
-            min = yList[0];
-
-            for (int i = 0; i < yList.Count; i++)
+            try
             {
-                avg += yList[i];
-                if (max < yList[i])
-                    max = yList[i];
-                if (min > yList[i])
-                    min = yList[i];
+                double avg = 0, max, min;
+                max = yList[0];
+                min = yList[0];
+
+                for (int i = 0; i < yList.Count; i++)
+                {
+                    avg += yList[i];
+                    if (max < yList[i])
+                        max = yList[i];
+                    if (min > yList[i])
+                        min = yList[i];
+                }
+                avg /= yList.Count;
+
+                TextBlockForAvg.Text = "Average value:" + "\n" + avg.ToString();
+
+                TextBlockForMax.Text = "Max element:" + "\n" + max.ToString();
+
+                TextBlockForMin.Text = "Min element:" + "\n" + min.ToString();
             }
-            avg /= yList.Count;
+            catch
+            {
 
-            TextBlockForAvg.Text = "Average value:" + "\n" + avg.ToString();
-            
-            TextBlockForMax.Text = "Max element:" + "\n" + max.ToString();
-
-            TextBlockForMin.Text = "Min element:" + "\n" + min.ToString();
+            }
 
         }
 
