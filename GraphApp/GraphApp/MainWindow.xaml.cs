@@ -110,14 +110,16 @@ namespace GraphApp
                 SeriesCollection.RemoveAt(0);
                 SeriesCollection.Add(new LineSeries
                 {
+                    Title = yName,
                     Values = yList.AsChartValues()
-                });
+                }); ; ;
             }
             else {
                 SeriesCollection = new SeriesCollection
                 {
                     new LineSeries
                     {
+                        Title = yName,
                         Values = yList.AsChartValues()
                     }
                 };
@@ -137,6 +139,7 @@ namespace GraphApp
 
             this.SeriesCollection.Add(new LineSeries
             {
+                Title = "Trend",
                 Values = yListForTrend.AsChartValues()
             });
 

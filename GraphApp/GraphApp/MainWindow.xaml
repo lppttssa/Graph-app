@@ -35,7 +35,7 @@
                 <TextBlock Height="51" Name="TextBlockForMax" FontFamily="Arial" FontSize="20" TextAlignment="Center" Width="216" Foreground="#e7e4e3"></TextBlock>
                 <TextBlock Height="50" x:Name="TextBlockForMin" FontFamily="Arial" FontSize="20" TextAlignment="Center" Width="216" Foreground="#e7e4e3"/>
                 <TextBlock Height="38" Name="TextBlockPrediction" FontFamily="Arial" FontSize="25" TextAlignment="Center" Width="216" Foreground="#e7e4e3">Prediction</TextBlock>
-                <TextBox Height="50" Background="#eab354" BorderBrush="AliceBlue" FontSize="27" TextAlignment="Center" 
+                <TextBox Height="50" Background="#e7e4e3" BorderBrush="AliceBlue" FontSize="27" TextAlignment="Center" 
                      FontFamily="Arial" IsEnabled="False" Name="TextBoxForPrediction" VerticalAlignment="Bottom"
                      KeyDown="TextBoxForPrediction_KeyDown" Width="216" Foreground="#262b2b"/>
             </ListBox>
