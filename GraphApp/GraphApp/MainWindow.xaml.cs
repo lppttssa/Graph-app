@@ -65,25 +65,21 @@ namespace GraphApp
         public void ReadTxtFile(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            char[] delimiters = new char[] { ' ', '\t', ',', ';' }; 
             if (openFileDialog.ShowDialog() == true)
             {
 
                 string file = File.ReadAllText(openFileDialog.FileName);
 
-                if (openFileDialog.FileName[openFileDialog.FileName.Length - 1] == 't')
-                {
-                    string[] lines = file.Split('\n');
-                    xArrayString = lines[0].Split(' ');
-                    yArrayString = lines[1].Split(' ');
-                    xName = xArrayString[0];
-                    yName = yArrayString[0];
-                    xArrayString = xArrayString.Skip(1).ToArray();
-                    yArrayString = yArrayString.Skip(1).ToArray();
-                }
-                else if (openFileDialog.FileName[openFileDialog.FileName.Length - 1] == 'v')
-                {
+                string[] lines = file.Split('\n');
+                xArrayString = lines[0].Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+                yArrayString = lines[1].Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+                xName = xArrayString[0];
+                yName = yArrayString[0];
+                xArrayString = xArrayString.Skip(1).ToArray();
+                yArrayString = yArrayString.Skip(1).ToArray();
 
-                }
 
                 try
                 {
@@ -202,9 +198,7 @@ namespace GraphApp
             }
 
         }
-
-     
-
+   
         public SeriesCollection SeriesCollection { get; set; }
 
         private void CartesianChart_Loaded(object sender, RoutedEventArgs e)
