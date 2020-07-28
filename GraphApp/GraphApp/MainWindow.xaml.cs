@@ -32,6 +32,8 @@ namespace GraphApp
         string xName, yName;
         double a, b;
 
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -44,13 +46,11 @@ namespace GraphApp
             ReadTxtFile(sender, e);
 
             //отрисовка графика 
-            DrawGraph();        
+            DrawGraph();
+
+            ShowStatistics();
         }
 
-        private void btnShowStat_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
 
         public void ReadTxtFile(object sender, RoutedEventArgs e)
         {
@@ -80,13 +80,12 @@ namespace GraphApp
             {
                 new LineSeries
                 {
-                    Title = xName,
                     Values = yList.AsChartValues()
                 }
             };
 
             Labels = xArrayString;
-            YFormatter = value => value.ToString("C");
+
 
 
             FindLinTrendLine();
@@ -98,7 +97,6 @@ namespace GraphApp
 
             SeriesCollection.Add(new LineSeries
             {
-                Title = "Линия Тренда",
                 Values = yListForTrend.AsChartValues()
             });
 
@@ -126,6 +124,60 @@ namespace GraphApp
                 double detB = SumXSqr * SumY - SumX * SumXY;
                 b = detB / det;
             }
+        }
+
+        public void ShowStatistics()
+        {
+            double avg = 0, max, min;
+            max = yList[0];
+            min = yList[0];
+
+            for (int i = 0; i < yList.Count; i++)
+            {
+                avg += yList[i];
+                if (max < yList[i])
+                    max = yList[i];
+                if (min > yList[i])
+                    min = yList[i];
+            }
+            avg /= yList.Count;
+
+            /*TextBlock textStat = new TextBlock();
+            textStat.Text = "Statistics";
+            textStat.FontSize = 22;
+            textStat.FontFamily = new FontFamily("Arial");
+            textStat.TextAlignment = TextAlignment.Center;
+            textStat.Width = StatisticListBox.Width - 20;
+            textStat.Text = "Statistics";
+            StatisticListBox.Items.Add(textStat);*/
+
+            /*TextBlock text = new TextBlock();
+            text.Text = "Average value:" + "\n" + avg.ToString();
+            text.FontSize = 18;
+            text.FontFamily = new FontFamily("Arial");
+            text.TextAlignment = TextAlignment.Center;
+            text.Width = StatisticListBox.Width - 20;*/
+            TextBlockForAvg.Text = "Average value:" + "\n" + avg.ToString();
+            //StatisticListBox.Items.Add(text);
+
+            /*TextBlock text1 = new TextBlock();
+            text1.FontSize = 18;
+            text1.FontFamily = new FontFamily("Arial");
+            text1.TextAlignment = TextAlignment.Center;
+            text1.Text = "Max element:" + "\n" + max.ToString();
+            text1.Width = StatisticListBox.Width - 20;
+            StatisticListBox.Items.Add(text1);*/
+            TextBlockForMax.Text = "Max element:" + "\n" + max.ToString();
+
+            /*TextBlock text2 = new TextBlock();
+            text2.FontSize = 18;
+            text2.FontFamily = new FontFamily("Arial");
+            text2.TextAlignment = TextAlignment.Center;
+            text2.Text = "Min element:" + "\n" + min.ToString();
+            text2.Width = StatisticListBox.Width - 20;
+            StatisticListBox.Items.Add(text2);*/
+            TextBlockForMin.Text = "Min element:" + "\n" + min.ToString();
+
         }
 
         public SeriesCollection SeriesCollection { get; set; }
