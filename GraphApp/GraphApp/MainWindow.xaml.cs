@@ -30,8 +30,8 @@ namespace GraphApp
         string[] xArrayString = new string[0];
         string[] yArrayString = new string[0];
         string xName, yName;
-        double a, b;
-        bool IsDraw;
+        double aLin, bLin, aExp, bExp;
+        bool IsDraw, isLine;
 
 
 
@@ -47,11 +47,16 @@ namespace GraphApp
             xArrayString = new string[0];
             yArrayString = new string[0];
             TextBoxForPrediction.Clear();
+            isLine = false;
 
             //чтение из файла
             ReadTxtFile(sender, e);
 
             FindLinTrendLine();
+
+            FindExpTrendLine();
+
+            CheckTrendLine();
 
             //отрисовка графика 
             DrawGraph();
@@ -132,10 +137,21 @@ namespace GraphApp
             Labels = xArrayString;
 
             List<double> yListForTrend = new List<double>();
-            for (int i = 0; i < xList.Count; i++)
+            if (isLine)
             {
-                yListForTrend.Add(xList[i] * a + b);
+                for (int i = 0; i < xList.Count; i++)
+                {
+                    yListForTrend.Add(xList[i] * aLin + bLin);
+                }
             }
+            else
+            {
+                for (int i = 0; i < xList.Count; i++)
+                {
+                    yListForTrend.Add(aExp * Math.Pow(Math.E, bExp * xList[i]));
+                }
+            }
+            
 
             this.SeriesCollection.Add(new LineSeries
             {
@@ -164,11 +180,43 @@ namespace GraphApp
             if (det != 0)
             {
                 double detA = SumXY * xList.Count - SumY * SumX;
-                a = detA / det;
+                aLin = detA / det;
 
                 double detB = SumXSqr * SumY - SumX * SumXY;
-                b = detB / det;
+                bLin = detB / det;
             }
+        }
+
+        public void FindExpTrendLine()
+        {
+            double SumX = 0, SumY = 0, SumXSqr = 0, SumXY = 0;
+            for (int i = 0; i < xList.Count; i++)
+            {
+                SumX += xList[i];
+                SumY += Math.Log(yList[i]);
+                SumXSqr += xList[i] * xList[i];
+                SumXY += Math.Log(yList[i]) * xList[i];
+            }
+
+            aExp = Math.Pow(Math.E, Convert.ToDouble((SumY * SumXSqr - SumXY * SumX))
+                / Convert.ToDouble((xList.Count * SumXSqr - SumX * SumX)));
+            bExp = Convert.ToDouble((xList.Count * SumXY - SumY * SumX))
+                / Convert.ToDouble((xList.Count * SumXSqr - SumX * SumX));
+        }
+
+        public void CheckTrendLine()
+        {
+            double LineMistake = 0, ExpMistake = 0;
+            for (int i = 0; i < yList.Count; i++)
+            {
+                LineMistake += Math.Abs(yList[i] - (aLin * xList[i] + bLin));
+                ExpMistake += Math.Abs(yList[i] - aExp * Math.Pow(Math.E, bExp * xList[i]));
+            }
+            if (LineMistake < ExpMistake)
+            {
+                isLine = true;
+            }
+
         }
 
         public void ShowStatistics()
