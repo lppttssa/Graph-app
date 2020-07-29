@@ -66,7 +66,7 @@ namespace GraphApp
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
 
-            char[] delimiters = new char[] { ' ', '\t', ',', ';' }; 
+            char[] delimiters = new char[] { ' ', '\t', ';' }; 
             if (openFileDialog.ShowDialog() == true)
             {
 
